@@ -27,3 +27,14 @@ Syntax: ./setup_cosmovisor.sh [OPTIONS] [DAEMON_NAME] [DAEMON_HOME]
 options:
   -h     Print this help and exit
 ````
+
+### [get_active_peers.sh](get_active_peers.sh)
+````shell
+The easiest and fastest way to get the active peers list.
+
+Syntax: bash <(curl -Lfs https://raw.githubusercontent.com/EZStaking/ez_utilities/main/get_active_peers.sh) [OPTIONS] [RPC_NODE]
+Syntax: ./get_active_peers.sh [OPTIONS] [RPC_NODE]
+
+options:
+  -h     Print this help and exit
+````
