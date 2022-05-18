@@ -28,6 +28,17 @@ options:
   -h     Print this help and exit
 ````
 
+### [setup_statesync.sh](setup_statesync.sh)
+````shell
+The easiest and fastest way to configure state-sync.
+
+Syntax: bash <(curl -Lfs https://raw.githubusercontent.com/EZStaking/ez_utilities/main/setup_statesync.sh) [OPTIONS] [RPC_NODE] [DAEMON_HOME]
+Syntax: ./setup_statesync.sh [OPTIONS] [RPC_NODE] [DAEMON_HOME]
+
+options:
+  -h     Print this help and exit
+````
+
 ### [get_active_peers.sh](get_active_peers.sh)
 ````shell
 The easiest and fastest way to get the active peers list.
