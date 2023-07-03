@@ -31,7 +31,7 @@ DAEMON_NAME=$1
 DAEMON_HOME=$2
 
 installCosmovisor() {
-  go install github.com/cosmos/cosmos-sdk/cosmovisor/cmd/cosmovisor@v1.0
+  go install github.com/cosmos/cosmos-sdk/cosmovisor/cmd/cosmovisor@latest
 }
 
 setupCosmovisor() {
