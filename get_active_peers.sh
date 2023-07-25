@@ -34,7 +34,7 @@ RPC_NODE=${1/tcp/http}
 PEERS=$(
 curl -s $RPC_NODE/net_info |
   jq -r '.result.peers[] |
-    "\(.node_info.id)@\(.remote_ip):\(.node_info.listen_addr | (split(":")[1]) |select(. != null))" |
+    "\(.node_info.id)@\(.remote_ip):\(.node_info.listen_addr | (split(":")[-1]) |select(. != null))" |
     select(. |  match("([0-9]{1,3}[\\.]){3}[0-9]{1,3}"))' |
   paste -sd,)
 
