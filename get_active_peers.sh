@@ -29,19 +29,20 @@ if [[ -z $1 ]]; then
 fi
 
 RPC_NODE=${1/tcp/http}
+NET_INFO=$(curl -s $RPC_NODE/net_info)
 
 # Toml Peers List
-PEERS=$(
-curl -s $RPC_NODE/net_info |
+PEERS=$(echo "${NET_INFO}" |
   jq -r '.result.peers[] |
     "\(.node_info.id)@\(.remote_ip):\(.node_info.listen_addr | (split(":")[-1]) |select(. != null))" |
     select(. |  match("([0-9]{1,3}[\\.]){3}[0-9]{1,3}"))' |
-  paste -sd,)
+  paste -sd,
+)
 
 # Nb. of Peers
-N_PEERS=$(curl -s $RPC_NODE/net_info |  jq -r '.result.n_peers')
+N_PEERS=$(echo "${NET_INFO}" | jq -r '.result.n_peers')
 
 echo "Peers:"
-echo ${PEERS}
+echo "${PEERS}"
 echo ""
 echo "Nb. of Peers: ${N_PEERS}"
