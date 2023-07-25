@@ -9,29 +9,39 @@ help()
    echo
    echo "options:"
    echo -e "  -h\t Print this help and exit"
+   echo -e "  -v latest\t Cosmovisor version"
 }
 
-while getopts ":h" option; do
+while getopts ":h:v" option; do
    case $option in
       h)
          help
          exit;;
+      v)
+        VERSION=$OPTARG
+        ;;
      \?)
          echo "Error: Invalid option"
          exit;;
    esac
 done
+shift $((OPTIND-1))
 
 if [[ -z $1 || -z $2 ]]; then
   help
   exit
 fi
 
+
+if [[ -z $VERSION ]]; then
+  VERSION="latest"
+fi
+
 DAEMON_NAME=$1
 DAEMON_HOME=$2
 
 installCosmovisor() {
-  go install github.com/cosmos/cosmos-sdk/cosmovisor/cmd/cosmovisor@latest
+  go install github.com/cosmos/cosmos-sdk/cosmovisor/cmd/cosmovisor@${VERSION}
 }
 
 setupCosmovisor() {

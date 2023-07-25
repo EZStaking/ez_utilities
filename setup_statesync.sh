@@ -9,18 +9,24 @@ help()
    echo
    echo "options:"
    echo -e "  -h\t Print this help and exit"
+   echo -e "  -b 42000\t Block height"
 }
+set -x
 
-while getopts ":h" option; do
+while getopts ":h:b:" option; do
    case $option in
       h)
          help
          exit;;
+      b)
+        BLOCK_HEIGHT=$OPTARG
+        ;;
      \?)
          echo "Error: Invalid option"
          exit;;
    esac
 done
+shift $((OPTIND-1))
 
 if [[ -z $1 || -z $2 ]]; then
   help
@@ -34,14 +40,18 @@ fi
 
 RPC_NODE=$1
 DAEMON_HOME=$2
-CURRENT_BLOCK_HEIGHT=$(curl -s ${RPC_NODE}/commit | jq -r '.result.signed_header.header.height')
 
-if [[ -z $CURRENT_BLOCK_HEIGHT ]]; then
-  echo "Error fetching current block height (node=${RPC_NODE})." >&2
-  exit 1
+if [[ -z $BLOCK_HEIGHT ]]; then
+  CURRENT_BLOCK_HEIGHT=$(curl -s ${RPC_NODE}/commit | jq -r '.result.signed_header.header.height')
+
+  if [[ -z $CURRENT_BLOCK_HEIGHT ]]; then
+    echo "Error fetching current block height (node=${RPC_NODE})." >&2
+    exit 1
+  fi
+
+  BLOCK_HEIGHT=$(bc <<< "${CURRENT_BLOCK_HEIGHT} - 1000")
 fi
 
-BLOCK_HEIGHT=$(bc <<< "${CURRENT_BLOCK_HEIGHT} - 1000")
 TRUST_HASH=$(curl -s $RPC_NODE/commit?height=${BLOCK_HEIGHT} | jq -r '.result.signed_header.commit.block_id.hash')
 
 sed -i.bak -E "s|^(enable[[:space:]]+=[[:space:]]+).*$|\1true| ; \

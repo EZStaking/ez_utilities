@@ -39,6 +39,7 @@ while getopts ":h:u:r:b:" option; do
        exit;;
    esac
 done
+shift $((OPTIND-1))
 
 if [[ -z $1 ]]; then
   help

@@ -21,16 +21,27 @@ while getopts ":h" option; do
          exit;;
    esac
 done
+shift $((OPTIND-1))
 
 if [[ -z $1 ]]; then
   help
   exit
 fi
 
-RPC_NODE=$1
+RPC_NODE=${1/tcp/http}
 
+# Toml Peers List
+PEERS=$(
 curl -s $RPC_NODE/net_info |
   jq -r '.result.peers[] |
-    "\(.node_info.id)@\(.remote_ip):\(.node_info.listen_addr | (split(":")[2]) |select(. != null))" |
+    "\(.node_info.id)@\(.remote_ip):\(.node_info.listen_addr | (split(":")[1]) |select(. != null))" |
     select(. |  match("([0-9]{1,3}[\\.]){3}[0-9]{1,3}"))' |
-  paste -sd,
+  paste -sd,)
+
+# Nb. of Peers
+N_PEERS=$(curl -s $RPC_NODE/net_info |  jq -r '.result.n_peers')
+
+echo "NB. of Peers: ${N_PEERS}"
+echo ""
+echo "Peers:"
+echo ${PEERS}
