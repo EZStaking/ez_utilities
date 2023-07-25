@@ -41,7 +41,7 @@ curl -s $RPC_NODE/net_info |
 # Nb. of Peers
 N_PEERS=$(curl -s $RPC_NODE/net_info |  jq -r '.result.n_peers')
 
-echo "NB. of Peers: ${N_PEERS}"
-echo ""
 echo "Peers:"
 echo ${PEERS}
+echo ""
+echo "Nb. of Peers: ${N_PEERS}"
